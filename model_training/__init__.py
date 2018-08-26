@@ -1,6 +1,6 @@
 """
 Placeholder
 
-Module author: Mitchell Miller <mitch.miller08@gmail.com>
+Module author: Mitch Miller <mitch.miller08@gmail.com>
 
 """
