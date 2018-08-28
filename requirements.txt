@@ -9,6 +9,6 @@
 ## Install requirements listed here
 ##    1. pip3 install -r requirements.txt
 
-opencv
+opencv-python
 numpy
 keras
