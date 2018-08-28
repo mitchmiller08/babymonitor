@@ -1,0 +1,14 @@
+## Python package requirements
+## Install virtualenv via either method:
+##    a. apt-get install python-virtualenv
+##    b. pip install virtualenv
+## Set up and start virtual environment
+##    1. cd /.../babymonitor
+##    2. virtualenv babymonitor_venvn
+##    3. source /.../babymonitor/babymonitor_venb/bin/activate
+## Install requirements listed here
+##    1. pip3 install -r requirements.txt
+
+opencv-python
+numpy
+keras
