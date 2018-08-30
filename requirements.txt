@@ -1,11 +1,17 @@
-## Python package requirements
+## Installation requirements
+
 ## Install virtualenv via either method:
 ##    a. apt-get install python-virtualenv
 ##    b. pip install virtualenv
+
+## Install opencv to OS directly
+##    sudo apt-get install libopencv-dev python3-opencv
+
 ## Set up and start virtual environment
 ##    1. cd /.../babymonitor
-##    2. virtualenv babymonitor_venvn
+##    2. virtualenv -p python3 babymonitor_venvn
 ##    3. source /.../babymonitor/babymonitor_venb/bin/activate
+
 ## Install requirements listed here
 ##    1. pip3 install -r requirements.txt
 
