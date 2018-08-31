@@ -53,11 +53,18 @@ import os
 import numpy as np
 
 class VideoFile(object):
-    """Placeholder docstring
+    """Class for converting video files into training images
+
+    Attributes:
+        path (str): The file path of the video file to be processed.
+        train_test_split (float, optional): The fraction of images assigned to
+            the training folder.
+        dir (str): The directory where the video file resides
+        capture (:obj:cv2.VideoCapture): The OpenCV video capture object.
 
     """
-    def __init__(self, path):
-        self.train_test_split = 0.75
+    def __init__(self, path, train_test_split=0.75):
+        self.train_test_split = train_test_split
         self.path = path
         self.dir, self.name = os.path.split(path)
         self.capture = cv2.VideoCapture(path)
