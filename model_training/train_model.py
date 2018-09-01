@@ -38,6 +38,7 @@ validation_data_dir = 'data/validation'
 m_train = sum(len(files) for root, dir, files in os.walk(train_data_dir))
 m_validation = sum(len(files) for root, dir, files in
                    os.walk(validation_data_dir))
+n_classes = len(os.listdir(train_data_dir))
 epochs = 50
 batch_size = 16
 
@@ -65,7 +66,7 @@ model.add(Flatten())
 model.add(Dense(64))
 model.add(Activation('relu'))
 model.add(Dropout(0.5))
-model.add(Dense(1))
+model.add(Dense(n_classes))
 model.add(Activation('softmax'))
 
 ## Compile model
@@ -82,7 +83,7 @@ train_datagen = ImageDataGenerator(
 train_generator = train_datagen.flow_from_directory(
     train_data_dir,
     target_size=(img_width, img_height),
-    batch_size=batch_size
+    batch_size=batch_size,
     class_mode='categorical')
 
 validation_datagen = ImageDataGenerator(
@@ -91,7 +92,7 @@ validation_datagen = ImageDataGenerator(
 validation_generator = validation_datagen.flow_from_directory(
     validation_data_dir,
     target_size=(img_width, img_height),
-    batch_size=batch_size
+    batch_size=batch_size,
     class_mode='categorical')
 
 ## Train model
