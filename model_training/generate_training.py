@@ -58,15 +58,20 @@ class VideoFile(object):
     Attributes:
         path (str): The file path of the video file to be processed.
         train_test_split (float, optional): The fraction of images assigned to
-            the training folder.
+            the training folder. The default value is 0.75
+        x_pixels (int, optional): The number of pixels in the x-axis of the
+            output images. The default value is 150.
+        y_pixels (int, optional): The number of pixels in the y-axis of the
+            output images. The default value is 150.
         dir (str): The directory where the video file resides
         capture (:obj:cv2.VideoCapture): The OpenCV video capture object.
 
     """
-    def __init__(self, path, train_test_split=0.75):
+    def __init__(self, path, train_test_split=0.75, x_pixels=150, y_pixels=150):
         self.train_test_split = train_test_split
         self.path = path
         self.dir, self.name = os.path.split(path)
+        self.x_pixels, self.y_pixels = x_pixels, y_pixels
         self.capture = cv2.VideoCapture(path)
 
     def split_frames(self):
@@ -77,6 +82,9 @@ class VideoFile(object):
 
         """
         success, image = self.capture.read()
+        if success:
+            # image = cv2.resize(image, (0,0), fx=X_FRACTION, fy=Y_FRACTION)
+            image = cv2.resize(image, (self.x_pixels, self.y_pixels))
         count = 0
         while success:
             gaussian_image, salt_pepper_image = self._distort_image(image)
@@ -93,6 +101,8 @@ class VideoFile(object):
                         .format(salt_pepper_dir,self.name[:-4],count),
                         salt_pepper_image)
             success, image = self.capture.read()
+            if success:
+                image = cv2.resize(image, (self.x_pixels, self.y_pixels))
             count += 1
 
     @staticmethod
