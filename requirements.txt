@@ -17,4 +17,6 @@
 
 opencv-python
 numpy
+tensorflow
+Pillow
 keras
