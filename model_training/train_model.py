@@ -21,6 +21,7 @@ References:
 
 """
 import os
+import pickle
 
 from datetime import datetime
 from keras.preprocessing.image import ImageDataGenerator
@@ -105,4 +106,10 @@ model.fit_generator(
 
 ## Save model
 current_date = datetime.now().date()
-model.save_weights('trained_model_{}.h5'.format(current_date))
+model.save('trained_model_{}.h5'.format(current_date))
+
+## Save label map
+label_map = train_generator.class_indices
+label_map = {label:key for key, label in label_map.items()}
+with open('label_map_{}.pkl'.format(current_date),'wb') as label_file:
+    pickle.dump(label_map,label_file)
