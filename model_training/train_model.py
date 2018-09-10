@@ -33,83 +33,88 @@ from keras import backend as K
 ## Define image dimensions
 img_width, img_height = 150, 150
 
-## Define training parameters
-train_data_dir = 'data/train'
-validation_data_dir = 'data/validation'
-m_train = sum(len(files) for root, dir, files in os.walk(train_data_dir))
-m_validation = sum(len(files) for root, dir, files in
-                   os.walk(validation_data_dir))
-n_classes = len(os.listdir(train_data_dir))
-epochs = 50
-batch_size = 16
 
-## Ensure image is formatted correctly
-if K.image_data_format() == 'channels_first':
-    input_shape = (3, img_width, img_height)
-else:
-    input_shape = (img_width, img_height, 3)
+def train():
+    ## Define training parameters
+    train_data_dir = 'data/train'
+    validation_data_dir = 'data/validation'
+    m_train = sum(len(files) for root, dir, files in os.walk(train_data_dir))
+    m_validation = sum(len(files) for root, dir, files in
+                       os.walk(validation_data_dir))
+    n_classes = len(os.listdir(train_data_dir))
+    epochs = 50
+    batch_size = 16
 
-## Define model architecture
-model = Sequential()
-model.add(Conv2D(32, (3, 3), input_shape=input_shape))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
+    ## Ensure image is formatted correctly
+    if K.image_data_format() == 'channels_first':
+        input_shape = (3, img_width, img_height)
+    else:
+        input_shape = (img_width, img_height, 3)
 
-model.add(Conv2D(32, (3, 3)))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
+    ## Define model architecture
+    model = Sequential()
+    model.add(Conv2D(32, (3, 3), input_shape=input_shape))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
 
-model.add(Conv2D(64, (3, 3)))
-model.add(Activation('relu'))
-model.add(MaxPooling2D(pool_size=(2, 2)))
+    model.add(Conv2D(32, (3, 3)))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
 
-model.add(Flatten())
-model.add(Dense(64))
-model.add(Activation('relu'))
-model.add(Dropout(0.5))
-model.add(Dense(n_classes))
-model.add(Activation('softmax'))
+    model.add(Conv2D(64, (3, 3)))
+    model.add(Activation('relu'))
+    model.add(MaxPooling2D(pool_size=(2, 2)))
 
-## Compile model
-model.compile(loss='binary_crossentropy', optimizer='adam',
-              metrics=['accuracy'])
+    model.add(Flatten())
+    model.add(Dense(64))
+    model.add(Activation('relu'))
+    model.add(Dropout(0.5))
+    model.add(Dense(n_classes))
+    model.add(Activation('softmax'))
 
-## Define data distortion generators
-train_datagen = ImageDataGenerator(
-    rescale=1./255,
-    shear_range=0.2,
-    zoom_range=0.2,
-    horizontal_flip=True)
+    ## Compile model
+    model.compile(loss='binary_crossentropy', optimizer='adam',
+                  metrics=['accuracy'])
 
-train_generator = train_datagen.flow_from_directory(
-    train_data_dir,
-    target_size=(img_width, img_height),
-    batch_size=batch_size,
-    class_mode='categorical')
+    ## Define data distortion generators
+    train_datagen = ImageDataGenerator(
+        rescale=1./255,
+        shear_range=0.2,
+        zoom_range=0.2,
+        horizontal_flip=True)
 
-validation_datagen = ImageDataGenerator(
-    rescale=1./255) # Only need to rescale
+    train_generator = train_datagen.flow_from_directory(
+        train_data_dir,
+        target_size=(img_width, img_height),
+        batch_size=batch_size,
+        class_mode='categorical')
 
-validation_generator = validation_datagen.flow_from_directory(
-    validation_data_dir,
-    target_size=(img_width, img_height),
-    batch_size=batch_size,
-    class_mode='categorical')
+    validation_datagen = ImageDataGenerator(
+        rescale=1./255) # Only need to rescale
 
-## Train model
-model.fit_generator(
-    train_generator,
-    steps_per_epoch=m_train//batch_size,
-    epochs=epochs,
-    validation_data=validation_generator,
-    validation_steps=m_validation//batch_size)
+    validation_generator = validation_datagen.flow_from_directory(
+        validation_data_dir,
+        target_size=(img_width, img_height),
+        batch_size=batch_size,
+        class_mode='categorical')
 
-## Save model
-current_date = datetime.now().date()
-model.save('trained_model_{}.h5'.format(current_date))
+    ## Train model
+    model.fit_generator(
+        train_generator,
+        steps_per_epoch=m_train//batch_size,
+        epochs=epochs,
+        validation_data=validation_generator,
+        validation_steps=m_validation//batch_size)
 
-## Save label map
-label_map = train_generator.class_indices
-label_map = {label:key for key, label in label_map.items()}
-with open('label_map_{}.pkl'.format(current_date),'wb') as label_file:
-    pickle.dump(label_map,label_file)
+    ## Save model
+    current_date = datetime.now().date()
+    model.save('trained_model_{}.h5'.format(current_date))
+
+    ## Save label map
+    label_map = train_generator.class_indices
+    label_map = {label:key for key, label in label_map.items()}
+    with open('label_map_{}.pkl'.format(current_date),'wb') as label_file:
+        pickle.dump(label_map,label_file)
+
+if __name__ == "__main__":
+    train()
