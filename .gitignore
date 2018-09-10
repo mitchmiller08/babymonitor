@@ -8,3 +8,7 @@ __pycache__/
 # Compiled models
 *.pkl
 *.h5
+
+# Training data
+*.jpg
+*.mp4
