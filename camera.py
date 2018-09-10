@@ -7,6 +7,7 @@ number of frames have been collected. A jpg encoded image is returned from every
 call of VideoCamera.get_frame().
 
 Module author: Mitch Miller <mitch.miller08@gmail.com>
+2018-09-08
 
 """
 import cv2
@@ -41,7 +42,7 @@ class VideoCamera(object):
     """
     STATE_REFRESH = 60
 
-    def __init__(self, model_path, label_map_path):
+    def __init__(self, model_path):
         ## Model attributes
         self.model = load_model(model_path)
 
