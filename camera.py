@@ -18,7 +18,7 @@ from multiprocessing import Process, Queue
 
 from keras.models import load_model
 
-from model_training.train_model import img_width, img_height
+from model_training.train_model import IMG_WIDTH, IMG_HEIGHT
 
 class VideoCamera(object):
     """A class for collecting images from a hardware camera
