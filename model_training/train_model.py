@@ -31,7 +31,7 @@ from keras.layers import Activation, Dropout, Flatten, Dense
 from keras import backend as K
 
 ## Define image dimensions
-img_width, img_height = 150, 150
+IMG_WIDTH, IMG_HEIGHT = 150, 150
 
 
 def train():
@@ -47,9 +47,9 @@ def train():
 
     ## Ensure image is formatted correctly
     if K.image_data_format() == 'channels_first':
-        input_shape = (3, img_width, img_height)
+        input_shape = (3, IMG_WIDTH, IMG_HEIGHT)
     else:
-        input_shape = (img_width, img_height, 3)
+        input_shape = (IMG_WIDTH, IMG_HEIGHT, 3)
 
     ## Define model architecture
     model = Sequential()
@@ -73,7 +73,7 @@ def train():
     model.add(Activation('softmax'))
 
     ## Compile model
-    model.compile(loss='binary_crossentropy', optimizer='adam',
+    model.compile(loss='categorical_crossentropy', optimizer='adam',
                   metrics=['accuracy'])
 
     ## Define data distortion generators
@@ -85,7 +85,7 @@ def train():
 
     train_generator = train_datagen.flow_from_directory(
         train_data_dir,
-        target_size=(img_width, img_height),
+        target_size=(IMG_WIDTH, IMG_HEIGHT),
         batch_size=batch_size,
         class_mode='categorical')
 
@@ -94,7 +94,7 @@ def train():
 
     validation_generator = validation_datagen.flow_from_directory(
         validation_data_dir,
-        target_size=(img_width, img_height),
+        target_size=(IMG_WIDTH, IMG_HEIGHT),
         batch_size=batch_size,
         class_mode='categorical')
 
